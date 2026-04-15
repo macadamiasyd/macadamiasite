@@ -73,11 +73,6 @@ export default function Splash() {
     >
       <div className={styles.grain} />
 
-      <span className={styles.kicker}>
-        <span className={styles.kickerDot} />
-        Macadamia · Sydney
-      </span>
-
       <div className={styles.logoWrap}>
         {/* Inline SVG so we can drive the wipe via CSS clip-path. */}
         <svg

@@ -1,67 +1,111 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getBgVideo } from "@/lib/bgVideo";
 import styles from "./Splash.module.css";
 
 /**
  * Splash intro screen.
  *
- * Covers the viewport for ~4 seconds on first page load, animating the
- * Macadamia wordmark in, then fading out. While the splash is visible it
- * also kicks off `<video preload="auto">` requests for every homepage
- * background clip — by the time the splash fades out, those MP4s are sitting
- * in the browser HTTP cache, so the homepage video element picks them up
- * instantly instead of showing the bare background colour for a beat.
+ * Holds the viewport while the homepage background video downloads, so the
+ * homepage never reveals itself before its <video> has buffered. The splash
+ * animates the Macadamia wordmark, then fades out only once BOTH of these
+ * are true:
  *
- * Timing
- * - 0.00s  splash mounts, logo wipe + kicker fade begin
- * - 1.60s  hairline draws beneath the logo
- * - 2.20s  footer line fades up
- * - 3.60s  splash starts fading out (0.85s transition)
- * - 4.45s  splash is fully hidden and removes itself from the tree
+ *   1. A minimum visible window has elapsed (so the logo animation always
+ *      has time to play — no 120ms flash on fast connections).
+ *   2. The chosen background video has fired `canplaythrough`, or a hard
+ *      max timeout has elapsed (so a stalled network can never strand the
+ *      user on the splash forever).
+ *
+ * The selected clip is shared with HomePage via `@/lib/bgVideo` so both
+ * consumers agree on the same URL and the HomePage <video> reuses the
+ * bytes that the hidden splash <video> already downloaded.
  */
-const BG_VIDEOS = [
-  "/animations/greencords.mp4",
-  "/animations/orange.mp4",
-  "/animations/redtape.mp4",
-];
 
-// Total time the splash is on-screen before it starts fading out.
-const VISIBLE_MS = 3600;
+// Minimum on-screen time in ms. Matches the logo wipe + hairline draw so
+// the full intro animation always plays through even on a warm cache.
+const MIN_VISIBLE_MS = 3200;
+// Absolute ceiling — if the video hasn't reported ready by this point we
+// reveal the homepage anyway rather than trap the user on the splash.
+const MAX_WAIT_MS = 9000;
 // Matches the CSS `transition: opacity 0.85s` on .root.
 const FADE_MS = 850;
 
 export default function Splash() {
+  const [minElapsed, setMinElapsed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const [exiting, setExiting] = useState(false);
   const [removed, setRemoved] = useState(false);
+  const [bgSrc, setBgSrc] = useState<string | null>(null);
+  const preloadRef = useRef<HTMLVideoElement | null>(null);
 
+  // Pick the bg video on mount (client-only, shared with HomePage).
   useEffect(() => {
-    // Start the fade-out after the visible window.
-    const fadeTimer = window.setTimeout(() => setExiting(true), VISIBLE_MS);
-    // Then unmount entirely once the fade has finished, so it can't intercept
-    // clicks or hold the videos in memory.
-    const removeTimer = window.setTimeout(
-      () => setRemoved(true),
-      VISIBLE_MS + FADE_MS,
+    setBgSrc(getBgVideo());
+  }, []);
+
+  // Minimum-visible timer + absolute max-wait safety net.
+  useEffect(() => {
+    const minTimer = window.setTimeout(
+      () => setMinElapsed(true),
+      MIN_VISIBLE_MS,
+    );
+    const maxTimer = window.setTimeout(
+      () => setVideoReady(true),
+      MAX_WAIT_MS,
     );
 
-    // Lock body scroll while the splash is covering the viewport so the user
-    // can't scroll past content they can't see yet.
+    // Lock body scroll while the splash is up so the user can't scroll
+    // content they still can't see.
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
-      window.clearTimeout(fadeTimer);
-      window.clearTimeout(removeTimer);
+      window.clearTimeout(minTimer);
+      window.clearTimeout(maxTimer);
       document.body.style.overflow = prevOverflow;
     };
   }, []);
 
-  // Release the scroll lock as soon as we start fading, so the user can
-  // interact with the homepage the moment it becomes visible.
+  // Listen for the hidden preload video becoming playable. `canplaythrough`
+  // is stronger than `loadeddata` — it means the browser estimates no
+  // stalls during playback, which is exactly what we want for a loop.
   useEffect(() => {
-    if (exiting) document.body.style.overflow = "";
-  }, [exiting]);
+    const el = preloadRef.current;
+    if (!el) return;
+
+    const markReady = () => setVideoReady(true);
+
+    // If the browser already has enough of it (e.g. SWR hit from disk cache),
+    // readyState >= HAVE_FUTURE_DATA (3) is good enough to reveal.
+    if (el.readyState >= 3) {
+      markReady();
+      return;
+    }
+
+    el.addEventListener("canplaythrough", markReady);
+    el.addEventListener("loadeddata", markReady);
+    // If the fetch errors for any reason, don't block the splash forever.
+    el.addEventListener("error", markReady);
+
+    return () => {
+      el.removeEventListener("canplaythrough", markReady);
+      el.removeEventListener("loadeddata", markReady);
+      el.removeEventListener("error", markReady);
+    };
+  }, [bgSrc]);
+
+  // Start fading out when both gates have opened.
+  useEffect(() => {
+    if (!minElapsed || !videoReady) return;
+    setExiting(true);
+    // Release scroll lock the moment the fade starts so the homepage is
+    // interactive immediately.
+    document.body.style.overflow = "";
+    const removeTimer = window.setTimeout(() => setRemoved(true), FADE_MS);
+    return () => window.clearTimeout(removeTimer);
+  }, [minElapsed, videoReady]);
 
   if (removed) return null;
 
@@ -100,26 +144,22 @@ export default function Splash() {
       </div>
 
       {/*
-        Offscreen preloaders. These fire GET requests for the three homepage
-        background clips so that by the time this splash fades out and
-        HomePage mounts, the video bytes are already in the HTTP cache and
-        the real <video> element can start playback immediately.
-
-        Not using `autoPlay` — we only need the network fetch, not playback.
+        Offscreen preloader for the chosen background clip. We hold the
+        splash up until this element fires `canplaythrough`, then fade out.
+        HomePage's visible <video> points at the same URL, so it reuses the
+        bytes already in the HTTP cache and begins playback immediately.
       */}
       <div className={styles.preloaders} aria-hidden="true">
-        {BG_VIDEOS.map((src) => (
+        {bgSrc && (
           <video
-            key={src}
-            src={src}
+            ref={preloadRef}
+            src={bgSrc}
             preload="auto"
             muted
             playsInline
-            // `disableRemotePlayback` keeps Safari from showing an AirPlay hint
-            // for an offscreen element.
             disableRemotePlayback
           />
-        ))}
+        )}
       </div>
     </div>
   );

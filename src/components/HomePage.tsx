@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getTaglines } from "@/data/projects";
+import { getBgVideo } from "@/lib/bgVideo";
 import { useLenis } from "./SmoothScroll";
 import styles from "./HomePage.module.css";
 
@@ -9,22 +10,18 @@ import styles from "./HomePage.module.css";
 // year (see `yearsIndependent` in projects.ts).
 const TAGLINES = getTaglines();
 
-const BG_VIDEOS = [
-  "/animations/greencords.mp4",
-  "/animations/orange.mp4",
-  "/animations/redtape.mp4",
-];
-
 export default function HomePage() {
   // Start deterministic for SSR; randomize after mount to avoid hydration mismatch
   const [idx, setIdx] = useState(0);
   const [outgoing, setOutgoing] = useState(false);
   const [bgSrc, setBgSrc] = useState<string | null>(null);
 
-  // Pick a random tagline and a random background video on mount
+  // Pick a random tagline on mount. The bg video picker is shared with the
+  // Splash via @/lib/bgVideo so both components agree on the same URL and
+  // the bytes the splash already fetched are reused here.
   useEffect(() => {
     setIdx(Math.floor(Math.random() * TAGLINES.length));
-    setBgSrc(BG_VIDEOS[Math.floor(Math.random() * BG_VIDEOS.length)]);
+    setBgSrc(getBgVideo());
   }, []);
 
   // Tagline rotation: fade out, swap, fade in

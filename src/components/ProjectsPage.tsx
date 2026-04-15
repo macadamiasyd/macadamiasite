@@ -49,8 +49,10 @@ export default function ProjectsPage() {
     return () => cancelAnimationFrame(raf);
   }, [visible]);
 
-  // Split the title into chars (ignoring HTML <em>) by rendering the two
-  // halves with their own char-rise stagger.
+  // Two phrases animated as a whole unit: the first slides in from the
+  // left, then after a short delay the italic emphasis phrase slides in
+  // from the right. Kept as two plain strings — no per-char splitting —
+  // because the animation is on the whole span now.
   const titleA = "Six briefs.";
   const titleB = "Six worlds.";
 
@@ -77,30 +79,8 @@ export default function ProjectsPage() {
         </span>
 
         <h1 className={styles.title}>
-          <span className={styles.titleLine}>
-            {titleA.split("").map((c, i) => (
-              <span
-                key={`a-${i}`}
-                className={styles.titleChar}
-                style={{ animationDelay: `${0.25 + i * 0.028}s` }}
-              >
-                {c === " " ? "\u00A0" : c}
-              </span>
-            ))}
-          </span>{" "}
-          <em className={styles.titleEm}>
-            {titleB.split("").map((c, i) => (
-              <span
-                key={`b-${i}`}
-                className={styles.titleChar}
-                style={{
-                  animationDelay: `${0.25 + (titleA.length + i) * 0.028}s`,
-                }}
-              >
-                {c === " " ? "\u00A0" : c}
-              </span>
-            ))}
-          </em>
+          <span className={styles.titleLine}>{titleA}</span>{" "}
+          <em className={styles.titleEm}>{titleB}</em>
         </h1>
 
         <span className={styles.titleHair} aria-hidden />

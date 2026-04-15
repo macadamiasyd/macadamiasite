@@ -148,6 +148,10 @@
   flex-direction: column;
   align-items: center;
   gap: 0.12em;
+  /* Reserve space for the tallest tagline variant (3 lines) so the CTA
+     doesn't shift vertically when the copy switches between 2- and
+     3-line versions. 3 lines × 1.15 line-height + 2 × 0.12 gap ≈ 3.7em. */
+  min-height: 3.7em;
   /* Synthetic weight for the Relative Book single-cut — the font only
      ships a book weight, so text-stroke fakes additional mass. */
   -webkit-text-stroke: 0.55px #1a1a1a;

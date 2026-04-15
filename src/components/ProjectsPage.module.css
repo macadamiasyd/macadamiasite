@@ -109,16 +109,14 @@
 
 .title {
   font-family: 'relative-book', Georgia, serif;
-  /* Floor dropped so small phones (320–360px) can still fit
-     "Six briefs. Six worlds." without cramming. */
-  font-size: clamp(30px, 6.2vw, 68px);
+  font-size: clamp(38px, 6vw, 68px);
   font-weight: 400;
   line-height: 1.18;
   margin-bottom: 30px;
   color: #1a1a1a;
   letter-spacing: -0.012em;
-  /* Keep the two phrases on their own lines on narrow viewports —
-     overridden in the mobile blocks to allow wrapping gracefully. */
+  /* Mobile breakpoints below drop the floor so small phones can still
+     fit "Six briefs. Six worlds." without cramming. */
 }
 
 .titleLine {

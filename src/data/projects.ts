@@ -146,7 +146,7 @@ export function getTaglines(now: Date = new Date()): string[][] {
   return [
     ["Nice to meet you.", "We make websites."],
     ["Sydney studio.", `${word} years`, "independent."],
-    ["Still here.", "Still making things we're proud of."],
+    ["Still here.", "Still making things", "we're proud of."],
     ["The quiet ones", "behind the screen."],
   ];
 }

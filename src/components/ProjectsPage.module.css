@@ -274,6 +274,13 @@
   .title {
     font-size: clamp(28px, 7.4vw, 42px);
   }
+  /* Force the two phrases onto their own lines on mobile — prevents the
+     inline wrap from sitting "Six briefs. Six worlds." on a single line
+     on wider phones and stacking awkwardly on narrower ones. */
+  .titleLine,
+  .titleEm {
+    display: block;
+  }
   .rail {
     display: none;
   }

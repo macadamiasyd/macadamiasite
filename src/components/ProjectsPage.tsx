@@ -9,23 +9,26 @@ export default function ProjectsPage() {
   const [count, setCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  // Trigger header animations once the section scrolls into view
+  // Trigger header animations once the header itself is meaningfully in
+  // view. Previously the observer watched the whole (very tall) section
+  // and fired when the first pixel entered the viewport — on desktop that
+  // ran the 2.5s animation sequence well before the user had scrolled far
+  // enough to see the heading, so by the time they did it was already
+  // static. Observing the header with threshold 0.3 makes it fire when the
+  // heading is actually on screen, across all viewports.
   useEffect(() => {
-    const el = sectionRef.current;
+    const el = headerRef.current;
     if (!el) return;
-    // The projects section is much taller than the viewport, so an
-    // intersectionRatio-based threshold would never fire — we use
-    // `isIntersecting` with threshold 0 and let the first visible pixel
-    // trigger the header entry animations.
     const obs = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
+        if (e.isIntersecting && e.intersectionRatio >= 0.3) {
           setVisible(true);
           obs.disconnect();
         }
       },
-      { threshold: 0 }
+      { threshold: [0, 0.3, 0.6] }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -62,7 +65,7 @@ export default function ProjectsPage() {
       ref={sectionRef}
       className={`${styles.container} ${visible ? styles.visible : ""}`}
     >
-      <div className={styles.header}>
+      <div className={styles.header} ref={headerRef}>
         <span className={styles.kicker}>
           <span className={styles.kickerLine} />
           <span className={styles.kickerCount}>

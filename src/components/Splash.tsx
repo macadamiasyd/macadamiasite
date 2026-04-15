@@ -29,8 +29,9 @@ const MIN_VISIBLE_MS = 3200;
 // Absolute ceiling — if the video hasn't reported ready by this point we
 // reveal the homepage anyway rather than trap the user on the splash.
 const MAX_WAIT_MS = 9000;
-// Matches the CSS `transition: opacity 0.85s` on .root.
-const FADE_MS = 850;
+// Matches the CSS `transition: opacity 1.1s` on .root (plus a small buffer
+// so the logo's slide-down transform finishes before the element unmounts).
+const FADE_MS = 1150;
 
 export default function Splash() {
   const [minElapsed, setMinElapsed] = useState(false);

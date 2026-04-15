@@ -1,0 +1,192 @@
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 44px;
+  color: var(--mac-fg);
+  transition: color 0.9s var(--ease), background 0.5s ease,
+    backdrop-filter 0.5s ease, padding 0.4s var(--ease);
+}
+
+.scrolled {
+  padding: 16px 44px;
+  background: color-mix(in srgb, var(--mac-bg) 82%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid color-mix(in srgb, var(--mac-fg) 8%, transparent);
+}
+
+/* Nav sitting over a dark project section — flip text to cream regardless
+   of the current section's --mac-fg. */
+.navLight {
+  color: #f4ede0;
+}
+.navLight.scrolled {
+  background: rgba(18, 14, 10, 0.42);
+  border-bottom-color: rgba(244, 237, 224, 0.08);
+}
+
+/* ── Logo ────────────────────────────────────────────────────────────── */
+
+.logo {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  height: 18px;
+  overflow: hidden;
+  transition: color 0.9s var(--ease), width 0.6s var(--ease),
+    height 0.5s var(--ease);
+  width: 182px;
+}
+
+.logoCollapsed {
+  /* shows only the leading "M" — first ~10% of the wordmark width */
+  width: 22px;
+}
+
+.logoMask {
+  display: block;
+  height: 18px;
+  width: 182px;
+  flex: 0 0 182px;
+  background: currentColor;
+  -webkit-mask: url("/macadamia-logo.svg") no-repeat left center / 182px 18px;
+  mask: url("/macadamia-logo.svg") no-repeat left center / 182px 18px;
+  transition: background 0.9s var(--ease);
+}
+
+/* ── Links ───────────────────────────────────────────────────────────── */
+
+.links {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  padding: 4px;
+}
+
+.link {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 1.8px;
+  text-transform: lowercase;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.35s ease, color 0.9s var(--ease);
+}
+
+/* Two 1px hairlines — one above the label, one below. Hidden by default,
+   each scales in from its own origin on hover and on the active link:
+   top line draws left→right, bottom line draws right→left.
+
+   `line-height: 1` collapses the inline line-box to the font em-box so the
+   top and bottom lines sit an equal visual distance from the cap-top and
+   baseline respectively. */
+.linkLabel {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  padding: 3px 0;
+}
+
+.linkLabel::before,
+.linkLabel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.linkLabel::before {
+  top: 0;
+  transform-origin: left center;
+}
+
+.linkLabel::after {
+  bottom: 0;
+  transform-origin: right center;
+}
+
+.link:hover .linkLabel::before,
+.link:hover .linkLabel::after,
+.linkActive .linkLabel::before,
+.linkActive .linkLabel::after {
+  transform: scaleX(1);
+}
+
+.link:hover {
+  opacity: 0.95;
+}
+
+.linkActive {
+  opacity: 1;
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .nav {
+    padding: 18px 22px;
+  }
+  .scrolled {
+    padding: 14px 22px;
+  }
+  .links {
+    gap: 12px;
+  }
+  .link {
+    padding: 10px 4px;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+  }
+}
+
+@media (max-width: 520px) {
+  .nav {
+    padding: 16px 18px;
+  }
+  .scrolled {
+    padding: 12px 18px;
+  }
+  .links {
+    gap: 10px;
+    padding: 2px;
+  }
+  .link {
+    padding: 8px 3px;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+  }
+  .logo {
+    width: 148px;
+    height: 15px;
+  }
+  .logoMask {
+    height: 15px;
+    width: 148px;
+    flex: 0 0 148px;
+    -webkit-mask-size: 148px 15px;
+    mask-size: 148px 15px;
+  }
+  .logoCollapsed {
+    width: 18px;
+  }
+}

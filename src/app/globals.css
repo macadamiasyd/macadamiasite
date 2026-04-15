@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@300;400&display=swap');
+@import "lenis/dist/lenis.css";
+
+/*
+ * Relative Book — Colophon Foundry
+ * Licensed to Joel Baldwin / Macadamia Digital (webfont + desktop).
+ * License PDFs are stored alongside the repo at /licenses/relative-book/.
+ * These files are protected under domestic and international trademark
+ * and copyright law — do not modify, reverse engineer, or redistribute.
+ */
+@font-face {
+  font-family: 'relative-book';
+  src: url('/fonts/relative-book.eot');
+  src: url('/fonts/relative-book.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/relative-book.woff2') format('woff2'),
+       url('/fonts/relative-book.woff') format('woff'),
+       url('/fonts/relative-book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --mac-bg: #faf9f7;
+  --mac-fg: #1a1a1a;
+  --mac-accent: #8a7560;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', 'Helvetica Neue', sans-serif;
+  background: var(--mac-bg);
+  color: var(--mac-fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+  transition: background-color 0.9s var(--ease), color 0.9s var(--ease);
+}
+
+::selection {
+  background: var(--mac-fg);
+  color: var(--mac-bg);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.18);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.32);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────────────────── */
+
+@keyframes macFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes macFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes macSlideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-44px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes macSlideRight {
+  from {
+    opacity: 0;
+    transform: translateX(44px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes macCharRise {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes macScrollPulse {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  45%  { transform: scaleY(1); transform-origin: top; }
+  55%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,259 @@
+/* Local @keyframes so CSS Modules renames the reference and definition together. */
+@keyframes macFadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes macFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes wordRise {
+  from { transform: translateY(110%); }
+  to   { transform: translateY(0); }
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 130px 44px 70px;
+  max-width: 740px;
+  margin: 0 auto;
+  position: relative;
+  background: #faf9f7;
+}
+
+/* ── Kicker ──────────────────────────────────────────────────────────── */
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0;
+  margin-bottom: 28px;
+  color: rgba(26, 26, 26, 0.5);
+}
+
+.visible .kicker {
+  animation: macFadeUp 0.85s var(--ease) 0.05s both;
+}
+
+.kickerLine {
+  display: inline-block;
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+/* ── Heading ─────────────────────────────────────────────────────────── */
+
+.heading {
+  font-family: 'relative-book', Georgia, serif;
+  font-size: clamp(32px, 4.6vw, 50px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.15;
+  margin-bottom: 56px;
+  letter-spacing: -0.005em;
+  color: #1a1a1a;
+}
+
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding: 0 0.06em 0.08em;
+  margin: 0 -0.06em;
+}
+
+.word:not(:last-child) {
+  margin-right: 0.18em;
+}
+
+.wordInner {
+  display: inline-block;
+  transform: translateY(110%);
+}
+
+.visible .wordInner {
+  animation: wordRise 1.05s var(--ease) both;
+}
+
+/* ── Body ────────────────────────────────────────────────────────────── */
+
+.text {
+  font-size: 16.5px;
+  line-height: 1.85;
+  color: #3a3a3a;
+  font-weight: 300;
+  margin-bottom: 24px;
+  opacity: 0;
+}
+
+.visible .text {
+  animation: macFadeUp 0.95s var(--ease) 0.5s both;
+}
+
+.visible .text + .text {
+  animation-delay: 0.62s;
+}
+
+/* ── Contact ─────────────────────────────────────────────────────────── */
+
+.contact {
+  margin-top: 80px;
+  padding-top: 44px;
+  border-top: 1px solid rgba(26, 26, 26, 0.08);
+  opacity: 0;
+}
+
+.visible .contact {
+  animation: macFadeUp 1s var(--ease) 0.78s both;
+}
+
+.contactLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 22px;
+}
+
+.contactDetail {
+  font-size: 17px;
+  line-height: 2;
+  font-weight: 300;
+}
+
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.12);
+  padding: 4px 0;
+  transition: border-color 0.4s ease, padding 0.55s var(--ease);
+}
+
+.contactLink:hover {
+  border-color: rgba(26, 26, 26, 0.55);
+  padding: 4px 6px;
+}
+
+.contactArrow {
+  display: inline-block;
+  font-size: 13px;
+  opacity: 0.4;
+  transition: transform 0.55s var(--ease), opacity 0.4s ease;
+}
+
+.contactLink:hover .contactArrow {
+  transform: translateX(5px);
+  opacity: 0.85;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+
+.footer {
+  margin-top: auto;
+  padding: 80px 0 0;
+  text-align: center;
+  font-size: 9.5px;
+  letter-spacing: 2.6px;
+  opacity: 0;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  color: rgba(26, 26, 26, 0.32);
+}
+
+.visible .footer {
+  animation: macFadeIn 1.2s ease 1s both;
+}
+
+.footerSep {
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+@media (max-width: 1080px) {
+  .container {
+    padding: 120px 36px 64px;
+  }
+}
+
+@media (max-width: 860px) {
+  .container {
+    padding: 110px 26px 50px;
+  }
+  .heading {
+    margin-bottom: 44px;
+  }
+  .text {
+    font-size: 15.5px;
+    line-height: 1.8;
+  }
+  .contact {
+    margin-top: 56px;
+    padding-top: 36px;
+  }
+  .contactDetail {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .container {
+    padding: 96px 20px 44px;
+  }
+  .kicker {
+    font-size: 9px;
+    letter-spacing: 2.4px;
+    margin-bottom: 22px;
+  }
+  .heading {
+    margin-bottom: 36px;
+  }
+  .text {
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 20px;
+  }
+  .contact {
+    margin-top: 44px;
+    padding-top: 28px;
+  }
+  .contactDetail {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  .contactLabel {
+    font-size: 9px;
+    letter-spacing: 2.4px;
+    gap: 10px;
+  }
+  .footer {
+    padding: 56px 0 0;
+    font-size: 9px;
+    letter-spacing: 2.2px;
+    flex-wrap: wrap;
+  }
+}

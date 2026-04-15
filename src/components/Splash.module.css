@@ -1,0 +1,184 @@
+/* Splash / intro screen — covers the viewport for ~4s while the background
+   videos on the homepage warm up in the cache. */
+
+@keyframes splashWipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes splashHairDraw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes splashKickerFade {
+  from { opacity: 0; letter-spacing: 6px; }
+  to   { opacity: 0.55; letter-spacing: 3px; }
+}
+
+@keyframes splashRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 0.4; transform: translateY(0); }
+}
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #faf9f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  transition: opacity 0.85s var(--ease), visibility 0.85s var(--ease);
+}
+
+.exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Subtle grain to match the homepage */
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.kicker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  opacity: 0;
+  margin-bottom: 38px;
+  animation: splashKickerFade 1.1s var(--ease) 0.1s both;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kickerDot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c39673;
+}
+
+/* ── Logo ───────────────────────────────────────────────────────────── */
+
+.logoWrap {
+  width: min(62vw, 520px);
+  color: #1a1a1a;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* Left → right clip-path wipe reveal */
+  clip-path: inset(0 100% 0 0);
+  animation: splashWipe 1.35s var(--ease-out) 0.35s both;
+  will-change: clip-path;
+}
+
+/* Thin hairline that draws under the logo */
+.hair {
+  width: min(62vw, 520px);
+  height: 1px;
+  margin-top: 34px;
+  background: rgba(26, 26, 26, 0.45);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: splashHairDraw 1.4s var(--ease) 1.6s both;
+}
+
+.footer {
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  opacity: 0;
+  animation: splashRise 1s var(--ease) 2.2s both;
+}
+
+.footerSep {
+  display: inline-block;
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* Hidden video preloader — positioned so the browser actually fetches. */
+.preloaders {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .logoWrap,
+  .hair {
+    width: min(72vw, 420px);
+  }
+  .kicker {
+    margin-bottom: 30px;
+    font-size: 9.5px;
+    letter-spacing: 2.6px;
+  }
+  .footer {
+    bottom: 30px;
+    font-size: 9px;
+    letter-spacing: 2.4px;
+  }
+}
+
+@media (max-width: 520px) {
+  .logoWrap,
+  .hair {
+    width: min(78vw, 340px);
+  }
+  .hair {
+    margin-top: 26px;
+  }
+  .kicker {
+    margin-bottom: 24px;
+    font-size: 9px;
+    letter-spacing: 2.2px;
+  }
+  .footer {
+    bottom: 22px;
+    font-size: 8.5px;
+    letter-spacing: 2.2px;
+  }
+}

@@ -57,11 +57,16 @@ export default function HomePage() {
   }, []);
 
   const tagline = TAGLINES[idx];
-  // Each tagline is a two-line tuple ["top line", "bottom line"]; we render
-  // them as two stacked blocks with their own char-rise stagger so the
-  // second line rides in just after the first finishes.
-  const line1Chars = tagline[0].split("");
-  const line2Chars = tagline[1].split("");
+  // Each tagline is a string[] of 1+ lines; we render them as stacked
+  // blocks, with each line's chars starting their rise a little after the
+  // line above finishes so the whole tagline reads as one entrance.
+  let charOffset = 0;
+  const renderedLines = tagline.map((line) => {
+    const startAt = charOffset;
+    const chars = line.split("");
+    charOffset += chars.length;
+    return { chars, startAt };
+  });
 
   const { scrollTo } = useLenis();
   const scrollToProjects = () => scrollTo("#projects");
@@ -99,30 +104,24 @@ export default function HomePage() {
         data-state={outgoing ? "out" : "in"}
         aria-live="polite"
       >
-        <span key={`${idx}-a`} className={styles.taglineLine}>
-          {line1Chars.map((c, i) => (
-            <span
-              key={i}
-              className={styles.char}
-              style={{ animationDelay: `${i * 0.022}s` }}
-            >
-              {c === " " ? "\u00A0" : c}
-            </span>
-          ))}
-        </span>
-        <span key={`${idx}-b`} className={styles.taglineLine}>
-          {line2Chars.map((c, i) => (
-            <span
-              key={i}
-              className={styles.char}
-              style={{
-                animationDelay: `${(line1Chars.length + i) * 0.022 + 0.12}s`,
-              }}
-            >
-              {c === " " ? "\u00A0" : c}
-            </span>
-          ))}
-        </span>
+        {renderedLines.map(({ chars, startAt }, lineIdx) => (
+          <span
+            key={`${idx}-${lineIdx}`}
+            className={styles.taglineLine}
+          >
+            {chars.map((c, i) => (
+              <span
+                key={i}
+                className={styles.char}
+                style={{
+                  animationDelay: `${(startAt + i) * 0.022 + lineIdx * 0.12}s`,
+                }}
+              >
+                {c === " " ? "\u00A0" : c}
+              </span>
+            ))}
+          </span>
+        ))}
       </p>
 
       <button className={styles.enter} onClick={scrollToProjects}>

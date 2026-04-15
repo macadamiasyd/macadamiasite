@@ -136,15 +136,16 @@ function capitalize(s: string): string {
 }
 
 /** Build the tagline list with the current year count baked in.
- *  Each tagline is a two-line tuple so the HomePage can render them
- *  stacked and at a much larger display size than a single-line version
- *  would allow. */
-export function getTaglines(now: Date = new Date()): [string, string][] {
+ *  Each tagline is a string[] of one or more lines — the HomePage renders
+ *  them stacked so the display can scale much larger than a single-line
+ *  variant would allow. The "Sydney studio" tagline is deliberately
+ *  three lines so "independent." wraps to its own line on mobile. */
+export function getTaglines(now: Date = new Date()): string[][] {
   const n = yearsIndependent(now);
   const word = capitalize(numberToWord(n));
   return [
     ["Nice to meet you.", "We make websites."],
-    ["Sydney studio.", `${word} years independent.`],
+    ["Sydney studio.", `${word} years`, "independent."],
     ["Still here.", "Still making things we're proud of."],
     ["The quiet ones", "behind the screen."],
   ];

@@ -57,7 +57,11 @@ export default function HomePage() {
   }, []);
 
   const tagline = TAGLINES[idx];
-  const chars = tagline.split("");
+  // Each tagline is a two-line tuple ["top line", "bottom line"]; we render
+  // them as two stacked blocks with their own char-rise stagger so the
+  // second line rides in just after the first finishes.
+  const line1Chars = tagline[0].split("");
+  const line2Chars = tagline[1].split("");
 
   const { scrollTo } = useLenis();
   const scrollToProjects = () => scrollTo("#projects");
@@ -95,12 +99,25 @@ export default function HomePage() {
         data-state={outgoing ? "out" : "in"}
         aria-live="polite"
       >
-        <span key={idx} className={styles.taglineInner}>
-          {chars.map((c, i) => (
+        <span key={`${idx}-a`} className={styles.taglineLine}>
+          {line1Chars.map((c, i) => (
             <span
               key={i}
               className={styles.char}
               style={{ animationDelay: `${i * 0.022}s` }}
+            >
+              {c === " " ? "\u00A0" : c}
+            </span>
+          ))}
+        </span>
+        <span key={`${idx}-b`} className={styles.taglineLine}>
+          {line2Chars.map((c, i) => (
+            <span
+              key={i}
+              className={styles.char}
+              style={{
+                animationDelay: `${(line1Chars.length + i) * 0.022 + 0.12}s`,
+              }}
             >
               {c === " " ? "\u00A0" : c}
             </span>

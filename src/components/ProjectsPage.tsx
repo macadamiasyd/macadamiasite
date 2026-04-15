@@ -51,7 +51,7 @@ export default function ProjectsPage() {
 
   // Split the title into chars (ignoring HTML <em>) by rendering the two
   // halves with their own char-rise stagger.
-  const titleA = "Six studios.";
+  const titleA = "Six briefs.";
   const titleB = "Six worlds.";
 
   return (
@@ -104,10 +104,6 @@ export default function ProjectsPage() {
         </h1>
 
         <span className={styles.titleHair} aria-hidden />
-
-        <p className={styles.sub}>
-          Each window is a tour of the live site — scroll to step inside.
-        </p>
       </div>
 
       {PROJECTS.map((p, i) => (

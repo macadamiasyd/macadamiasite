@@ -40,18 +40,30 @@
   pointer-events: none;
 }
 
-/* Soft overlay so the foreground text stays legible on top of the animation. */
+/* Soft overlay so the foreground text stays legible on top of the animation.
+   Two stacked gradients:
+     1. A subtle diagonal tint running bottom-right → top-left so the veil
+        has a bit of directional variation instead of being flat.
+     2. The original centred radial veil, with every stop bumped by ~0.2 so
+        the homepage text sits on a denser base than before. */
 .bgOverlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(250, 249, 247, 0.5) 0%,
-    rgba(250, 249, 247, 0.72) 45%,
-    rgba(250, 249, 247, 0.85) 100%
-  );
+  background:
+    linear-gradient(
+      to top left,
+      rgba(250, 249, 247, 0) 0%,
+      rgba(250, 249, 247, 0.06) 45%,
+      rgba(250, 249, 247, 0.16) 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(250, 249, 247, 0.7) 0%,
+      rgba(250, 249, 247, 0.92) 45%,
+      rgba(250, 249, 247, 1) 100%
+    );
 }
 
 /* Everything above overlay — stacked via z-index; .est keeps its own

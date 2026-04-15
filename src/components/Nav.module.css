@@ -95,14 +95,18 @@
    each scales in from its own origin on hover and on the active link:
    top line draws left→right, bottom line draws right→left.
 
-   `line-height: 1` collapses the inline line-box to the font em-box so the
-   top and bottom lines sit an equal visual distance from the cap-top and
-   baseline respectively. */
+   `line-height: 1` collapses the inline line-box to the font em-box. The
+   top line sits at the top of that em-box (above cap-height) with 3px
+   padding; the bottom line sits at the bottom (below the baseline) with
+   a slightly larger padding to compensate for the fact that the nav
+   labels are lowercase with no descenders — so the visual bottom of the
+   glyph is the baseline, ~2–3px above the em-bottom. Without the extra
+   padding the bottom line reads visibly closer to the text than the top. */
 .linkLabel {
   position: relative;
   display: inline-block;
   line-height: 1;
-  padding: 3px 0;
+  padding: 3px 0 6px;
 }
 
 .linkLabel::before,

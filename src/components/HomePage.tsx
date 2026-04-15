@@ -35,7 +35,7 @@ export default function HomePage() {
         setIdx((i) => (i + 1) % TAGLINES.length);
         setOutgoing(false);
       }, 480);
-    }, 5800);
+    }, 4800);
     return () => window.clearInterval(iv);
   }, []);
 

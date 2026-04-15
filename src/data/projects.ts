@@ -11,16 +11,6 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    name: "Buchan",
-    slug: "buchan",
-    type: "Architecture",
-    url: "https://buchan.au",
-    display: "buchan.au",
-    bg: "#f3efe9",
-    fg: "#1c1c1c",
-    accent: "#8a7560",
-  },
-  {
     name: "Thinkerbell",
     slug: "thinkerbell",
     type: "Creative Agency",
@@ -33,7 +23,7 @@ export const PROJECTS: Project[] = [
   {
     name: "Turner Studio",
     slug: "turner-studio",
-    type: "Interior Design",
+    type: "Urban and Experiential Design",
     url: "https://turnerstudio.com.au",
     display: "turnerstudio.com.au",
     bg: "#e5ddd1",
@@ -59,6 +49,16 @@ export const PROJECTS: Project[] = [
     bg: "#003d2e",
     fg: "#edf8f2",
     accent: "#00d18b",
+  },
+  {
+    name: "Buchan",
+    slug: "buchan",
+    type: "Architecture",
+    url: "https://buchan.au",
+    display: "buchan.au",
+    bg: "#f3efe9",
+    fg: "#1c1c1c",
+    accent: "#8a7560",
   },
   {
     name: "Guilt Free Post",

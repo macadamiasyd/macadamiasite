@@ -57,9 +57,9 @@ export default function AboutPage() {
       <p className={styles.text}>
         Macadamia is a website and software development studio based in Sydney.
         For over fifteen years, we&apos;ve partnered with every type of
-        enterprise — architects, design studios, production companies, property
-        developers, creative agencies, and not-for-profits — to build digital
-        experiences that feel as considered as the work they showcase.
+        enterprise — from architects, design studios and creative agencies, to
+        property developers, engineering firms and not-for-profits — to build
+        digital experiences that feel as considered as the work they showcase.
         We&apos;re small by design — one conversation, one relationship, one
         project done properly.
       </p>

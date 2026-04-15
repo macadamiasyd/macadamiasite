@@ -106,7 +106,9 @@
   font-family: 'relative-book', Georgia, serif;
   font-size: clamp(38px, 6vw, 68px);
   font-weight: 400;
-  line-height: 1.05;
+  /* Was 1.05 — bumped so italic ascenders (l, d) have vertical room and
+     aren't clipped at the top of their inline-block box on mobile Safari. */
+  line-height: 1.18;
   margin-bottom: 30px;
   color: #1a1a1a;
   letter-spacing: -0.012em;
@@ -120,12 +122,21 @@
   display: inline-block;
   font-style: italic;
   color: #8a7560;
+  /* Faux italic (the font ships as regular only) slants the whole word to
+     the right, which pushes the ascenders of "l" and "d" past the block's
+     right edge. A small right padding absorbs that overhang so nothing
+     gets clipped by a downstream compositor layer. */
+  padding-right: 0.12em;
 }
 
 .titleChar {
   display: inline-block;
   opacity: 0;
-  will-change: opacity, transform;
+  /* Bit of top padding so the italic "l" / "d" ascenders clear any
+     compositor layer created by the rise animation. `will-change` was
+     dropped here because on mobile Safari it promoted each char to its
+     own layer and pixel-clipped the italic overhang. */
+  padding-top: 0.06em;
 }
 
 .visible .titleChar {

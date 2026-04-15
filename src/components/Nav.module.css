@@ -49,10 +49,10 @@
 }
 
 .logoCollapsed {
-  /* Shows just the leading "m" glyph — 46px was too wide and leaked
-     the following "a" into the frame. 34px lands on the end of the
-     "m" with a hair of right-side margin. */
-  width: 34px;
+  /* Shows just the leading "m" glyph. 34px was still leaking the
+     start of the "a" into frame — 28px lands just past the trailing
+     stem of the "m". */
+  width: 28px;
 }
 
 .logoMask {
@@ -189,8 +189,8 @@
     mask-size: 148px 15px;
   }
   .logoCollapsed {
-    /* Same ratio as desktop: ~25% of the full wordmark width to keep
-       the whole "m" glyph in-frame. */
-    width: 38px;
+    /* Same ratio as the desktop 28px value against the smaller mobile
+       wordmark — just the "m", no leading "a". */
+    width: 23px;
   }
 }

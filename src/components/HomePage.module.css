@@ -16,7 +16,14 @@
 }
 
 .container {
+  /* `100vh` is the traditional fallback. `100lvh` (large viewport height)
+     sizes the container as if the mobile URL bar were already collapsed,
+     so when the user scrolls for the first time and iOS Safari / Chrome
+     Android retract the URL bar, the container doesn't resize — which
+     was causing the background video to reflow/jump horizontally on the
+     first touch. */
   min-height: 100vh;
+  min-height: 100lvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,6 +45,12 @@
   object-position: center;
   z-index: 0;
   pointer-events: none;
+  /* Force the video onto its own compositor layer so URL-bar collapse
+     animations on mobile don't cause a paint-level reflow of the frame. */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Soft overlay so the foreground text stays legible on top of the animation.

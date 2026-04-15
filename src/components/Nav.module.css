@@ -49,8 +49,10 @@
 }
 
 .logoCollapsed {
-  /* shows only the leading "M" — first ~10% of the wordmark width */
-  width: 22px;
+  /* Shows the full leading "m" glyph. The previous 22px clipped it in
+     half — the first "m" occupies roughly the first 40–44px of the
+     182px-wide wordmark, so 46px gives it a hair of breathing room. */
+  width: 46px;
 }
 
 .logoMask {
@@ -187,6 +189,8 @@
     mask-size: 148px 15px;
   }
   .logoCollapsed {
-    width: 18px;
+    /* Same ratio as desktop: ~25% of the full wordmark width to keep
+       the whole "m" glyph in-frame. */
+    width: 38px;
   }
 }
